@@ -167,3 +167,4 @@ powerhour(uri, playlist_name, is_random, is_offset, device_id)
 #todo 1 - pause execution somehow.  the user can pause from the device playing but the program should be able to also
 #todo 2 - should we send a pause command if the program is forcefully stopped
 #todo 3 - pause option upon restart?  you might not have access to the playing device to actually pause it
+#todo 4 - add a christmas mode, maybe its own class?
