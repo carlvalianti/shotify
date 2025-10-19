@@ -3,6 +3,8 @@ from spotipy.oauth2 import SpotifyOAuth
 import time
 import random
 
+SECONDS = 60
+
 def powerhour(chosen_uri, chosen_playlist, chosen_random, chosen_offset, chosen_device_id):
     """Main logic for running the powerhour program."""
     # playlist URI and info - make this user selectable
@@ -33,7 +35,7 @@ def powerhour(chosen_uri, chosen_playlist, chosen_random, chosen_offset, chosen_
             print(f"Playing track #{i + 1} out of {num_tracks} tracks from '{local_playlist}'")
             sp.start_playback(device_id = local_device_id,context_uri=powerhour_uri, offset={"position": i}, position_ms=offset)
             # wait 60 seconds to change song / 60 1 second waits for any user pauses
-            for _ in range(10):
+            for _ in range(SECONDS):
                 time.sleep(1)
                 # if user pauses, sleep program until they resume
                 while not sp.current_playback()['is_playing']:
