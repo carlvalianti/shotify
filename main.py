@@ -3,6 +3,7 @@ from spotipy.oauth2 import SpotifyOAuth
 import time
 import random
 
+#change for testing
 SECONDS = 60
 
 def powerhour(chosen_uri, chosen_playlist, chosen_random, chosen_offset, chosen_device_id):
