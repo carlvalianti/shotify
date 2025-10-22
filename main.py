@@ -30,21 +30,25 @@ def powerhour(chosen_uri, chosen_playlist, chosen_random, chosen_offset, chosen_
     # get last track number
     last_song = track_list[-1]
 
-    for i in track_list:
+    for song_number, i in enumerate(track_list, start=1):
         # play every song but the last starting at 30s
         if i != last_song:
-            print(f"Playing track #{i + 1} out of {num_tracks} tracks from '{local_playlist}'")
-            sp.start_playback(device_id = local_device_id,context_uri=powerhour_uri, offset={"position": i}, position_ms=offset)
+            print(
+                f"Playing track #{song_number} out of {num_tracks} tracks from '{local_playlist}' (playlist position: {i + 1})")
+            sp.start_playback(device_id=local_device_id, context_uri=powerhour_uri,
+                              offset={"position": i}, position_ms=offset)
+            time.sleep(SECONDS)
             # wait 60 seconds to change song / 60 1 second waits for any user pauses
-            for _ in range(SECONDS):
-                time.sleep(1)
-                # if user pauses, sleep program until they resume
-                while not sp.current_playback()['is_playing']:
-                    time.sleep(0.1)
+            # for _ in range(SECONDS):
+            #     time.sleep(1)
+            #     # if user pauses, sleep program until they resume
+            #     while not sp.current_playback()['is_playing']:
+            #         time.sleep(0.1)
         # play last song in its entirety
         else:
-            print(f"Playing [LAST TRACK] #{i + 1} out of {num_tracks} tracks from '{local_playlist}'")
-            sp.start_playback(context_uri=powerhour_uri, offset={"position": i})
+            print(
+                f"Playing [LAST TRACK] #{song_number} out of {num_tracks} tracks from '{local_playlist}' (playlist position: {i + 1})")
+            sp.start_playback(device_id=local_device_id, context_uri=powerhour_uri, offset={"position": i})
 
 def devices(user_devices):
     """Handles device selection (ID) with refresh support"""
