@@ -14,15 +14,14 @@ SONG_DURATION = 3 #seconds
 CUSTOM_TRACKS = {
     "Christmas Canon": (165000, 60, False),  # Start at 2:45
     "Thistlehair": (20000, 60, False),  # Start at 0:20
-    "Carol of the Bells": (0, None, True),  # Play entire song
     "Has Got the Aids": (55000, 60, False),  # Start at 0:55
     "Same Old Lang": (160000, 60, False),  # Start at 2:40
     "Do They Know": (100000, 60, False),  # Start at 1:40
     "Grown-Up": (130000, 60, False),  # Start at 2:10
     "Twelve Pains": (115000, 60, False),  # Start at 1:55
     "Cherry Cherry": (120000, 60, False),  # Start at 2:00
-    "Believe - Josh": (158000, 60, False),  # Start at 2:38
-    "Happy Hanukkah": (0, None, True),  # Start at 0:30
+    "Believe Josh": (158000, 60, False),  # Start at 2:38
+    "Happy Hanukkah": (0, None, True),  # Play entire song
 }
 
 
