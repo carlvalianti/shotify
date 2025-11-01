@@ -77,14 +77,14 @@ def christmas_powerhour(device_id):
 
         # Handle last song - always play in full
         if is_last_song:
-            print(f"🎵 Track #{song_number}/{total_tracks} - '{track_name}' - [FINAL SONG] Playing in full! 🎄")
+            print(f"🎵 Track #{song_number}/{total_tracks} - '{track_name}' - [FINAL SONG] You made it!! 🎄")
             sp.start_playback(
                 device_id=device_id,
                 context_uri=CHRISTMAS_PLAYLIST_URI,
                 offset={"position": track_index},
                 position_ms=0
             )
-            print("   🎅 Last song playing... waiting for completion...")
+            print("   🎅 Last song playing... waiting...")
 
             # Wait for the song to finish
             try:
