@@ -5,14 +5,14 @@ import time
 # Christmas Power Hour Configuration
 CHRISTMAS_PLAYLIST_URI = "spotify:playlist:3KmQlFPFNb1mpsF9mVkyZ8"
 CHRISTMAS_PLAYLIST_NAME = "Christmas Power Hour"
-SONG_DURATION = 3 #seconds
+SONG_DURATION = 3  # seconds - Change to 60 for real power hour
 
 # ONLY list tracks with custom timings
 # Format: "track name (or partial)": (start_ms, duration_seconds, play_full)
 # Track names are case-insensitive and can be partial matches
 # Any track not listed here will default to: start at 0s, play 60s
 CUSTOM_TRACKS = {
-    "Christmas Canon": (165000, 60, False),  # Start at 2:45
+    "Christmas Canon": (165000, 65, False),  # Start at 2:45
     "Thistlehair": (20000, 60, False),  # Start at 0:20
     "Has Got the Aids": (55000, 60, False),  # Start at 0:55
     "Same Old Lang": (160000, 60, False),  # Start at 2:40
@@ -21,11 +21,56 @@ CUSTOM_TRACKS = {
     "Twelve Pains": (115000, 60, False),  # Start at 1:55
     "Cherry Cherry": (120000, 60, False),  # Start at 2:00
     "Believe Josh": (158000, 60, False),  # Start at 2:38
-    "Happy Hanukkah": (0, None, True),  # Play entire song
+    "Bruce": (30000, 60, False),  # Start at 0:30
+    "Happy Hanukkah": (0, 215, False),  # Play entire song
 }
 
 
 # Note: Total track count is retrieved dynamically from the playlist
+
+
+def save_progress(track_index, track_name, total_tracks):
+    """Save current progress to file."""
+    try:
+        with open('powerhour_progress.txt', 'w') as f:
+            f.write(f"Last played: Track #{track_index + 1}/{total_tracks}\n")
+            f.write(f"Track name: {track_name}\n")
+    except Exception as e:
+        # Don't crash the program if file write fails
+        print(f"   Note: Couldn't save progress - {e}")
+
+
+def read_last_progress():
+    """Read last saved progress if it exists."""
+    try:
+        with open('powerhour_progress.txt', 'r') as f:
+            content = f.read()
+            print("\n📄 Last session progress found:")
+            print(content)
+            return True
+    except FileNotFoundError:
+        return False
+
+
+def get_starting_track(total_tracks):
+    """Ask user if they want to start from a specific track."""
+    while True:
+        choice = input(
+            f"\nStart from beginning or specific track? (Enter track # 1-{total_tracks}, or press Enter for beginning): ").strip()
+
+        if choice == "":
+            return 0  # Start from beginning (index 0)
+
+        try:
+            track_num = int(choice)
+            if 1 <= track_num <= total_tracks:
+                print(f"✅ Starting from track #{track_num}")
+                return track_num - 1  # Convert to 0-based index
+            else:
+                print(f"❌ Please enter a number between 1 and {total_tracks}")
+        except ValueError:
+            print("❌ Please enter a valid number or press Enter")
+
 
 def find_custom_settings(track_search_string):
     """
@@ -40,13 +85,13 @@ def find_custom_settings(track_search_string):
     # Check for partial matches (case-insensitive)
     for custom_name, settings in CUSTOM_TRACKS.items():
         if custom_name.lower() in search_string_lower:
-            #print(f"   ✓ Matched '{custom_name}' in '{track_search_string}'")
+            # print(f"   ✓ Matched '{custom_name}' in '{track_search_string}'")  # Uncomment for debugging
             return settings
 
     return None
 
 
-def christmas_powerhour(device_id):
+def christmas_powerhour(device_id, start_index=0):
     """Run the Christmas Power Hour with custom track timings."""
 
     print(f"\n🎄 Starting Christmas Power Hour! 🎄")
@@ -58,8 +103,11 @@ def christmas_powerhour(device_id):
 
     print(f"Total tracks: {total_tracks}\n")
 
-    # Play all tracks in the playlist
-    for track_index in range(total_tracks):
+    if start_index > 0:
+        print(f"⏩ Skipping to track #{start_index + 1}\n")
+
+    # Play all tracks in the playlist (starting from start_index)
+    for track_index in range(start_index, total_tracks):
         song_number = track_index + 1
         is_last_song = (track_index == total_tracks - 1)
 
@@ -74,6 +122,9 @@ def christmas_powerhour(device_id):
         else:
             track_name = "Unknown"
             track_search_string = "Unknown"
+
+        # Save progress before playing track
+        save_progress(track_index, track_name, total_tracks)
 
         # Handle last song - always play in full
         if is_last_song:
@@ -222,9 +273,19 @@ if __name__ == "__main__":
         if device_id is not None:
             break
 
+    # Show last progress if available
+    read_last_progress()
+
+    # Get playlist info to show track count
+    temp_playlist = sp.playlist(playlist_id=CHRISTMAS_PLAYLIST_URI, additional_types=('track',))
+    total_tracks = len(temp_playlist['tracks']['items'])
+
+    # Get starting track
+    start_index = get_starting_track(total_tracks)
+
     # Confirm before starting
-    confirm = input("Ready to start? (y/n): ").strip().lower()
+    confirm = input("\nReady to start? (y/n): ").strip().lower()
     if confirm in ('y', 'yes'):
-        christmas_powerhour(device_id)
+        christmas_powerhour(device_id, start_index)
     else:
         print("Christmas Power Hour cancelled. Happy Holidays! 🎁")
