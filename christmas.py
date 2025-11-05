@@ -8,23 +8,22 @@ CHRISTMAS_PLAYLIST_NAME = "Christmas Power Hour"
 SONG_DURATION = 3  # seconds - Change to 60 for real power hour
 
 # ONLY list tracks with custom timings
-# Format: "track name (or partial)": (start_ms, duration_seconds, play_full)
+# Format: "track name (or partial)": (start_ms, duration_seconds)
 # Track names are case-insensitive and can be partial matches
 # Any track not listed here will default to: start at 0s, play 60s
 CUSTOM_TRACKS = {
-    "Christmas Canon": (165000, 65, False),  # Start at 2:45
-    "Thistlehair": (20000, 60, False),  # Start at 0:20
-    "Has Got the Aids": (55000, 60, False),  # Start at 0:55
-    "Same Old Lang": (160000, 60, False),  # Start at 2:40
-    "Do They Know": (100000, 60, False),  # Start at 1:40
-    "Grown-Up": (130000, 60, False),  # Start at 2:10
-    "Twelve Pains": (115000, 60, False),  # Start at 1:55
-    "Cherry Cherry": (120000, 60, False),  # Start at 2:00
-    "Believe Josh": (158000, 60, False),  # Start at 2:38
-    "Bruce": (30000, 60, False),  # Start at 0:30
-    "Happy Hanukkah": (0, 215, False),  # Play entire song
+    "Christmas Canon": (165000, 65),  # Start at 2:45
+    "Thistlehair": (20000, 60),  # Start at 0:20
+    "Has Got the Aids": (55000, 60),  # Start at 0:55
+    "Same Old Lang": (160000, 60),  # Start at 2:40
+    "Do They Know": (100000, 63),  # Start at 1:40
+    "Grown-Up": (130000, 60),  # Start at 2:10
+    "Twelve Pains": (115000, 60),  # Start at 1:55
+    "Cherry Cherry": (120000, 60),  # Start at 2:00
+    "Believe Josh": (158000, 60),  # Start at 2:38
+    "Bruce": (30000, 60),  # Start at 0:30
+    "Happy Hanukkah": (0, 215),  # Play full song
 }
-
 
 # Note: Total track count is retrieved dynamically from the playlist
 
@@ -75,7 +74,7 @@ def get_starting_track(total_tracks):
 def find_custom_settings(track_search_string):
     """
     Check if a track has custom settings by matching track name (and optionally artist).
-    Returns (start_ms, duration_seconds, play_full) or None if no match.
+    Returns (start_ms, duration_seconds) or None if no match.
     """
     if not track_search_string:
         return None
@@ -156,40 +155,23 @@ def christmas_powerhour(device_id, start_index=0):
         custom_settings = find_custom_settings(track_search_string)
 
         if custom_settings:
-            start_ms, duration_seconds, play_full = custom_settings
+            start_ms, duration_seconds = custom_settings
 
-            if play_full:
-                print(f"🎵 Track #{song_number}/{total_tracks} - '{track_name}' - Playing FULL SONG ⭐")
-                sp.start_playback(
-                    device_id=device_id,
-                    context_uri=CHRISTMAS_PLAYLIST_URI,
-                    offset={"position": track_index},
-                    position_ms=start_ms
-                )
-                # Wait for song to finish (you could also just let it play and move on manually)
-                print("   ⏸️  Press Ctrl+C when ready for next track, or wait for song to end...")
-                try:
-                    # Sleep for a long time - user will Ctrl+C or let it finish
-                    time.sleep(600)  # 10 minutes max
-                except KeyboardInterrupt:
-                    print("   ⏭️  Moving to next track...")
-            else:
-                # Convert start time to readable format
-                start_min = start_ms // 60000
-                start_sec = (start_ms % 60000) // 1000
+            # Convert start time to readable format
+            start_min = start_ms // 60000
+            start_sec = (start_ms % 60000) // 1000
 
-                print(
-                    f"🎵 Track #{song_number}/{total_tracks} - '{track_name}' - Starting at {start_min}:{start_sec:02d}, playing {duration_seconds}s ⭐")
+            print(f"🎵 Track #{song_number}/{total_tracks} - '{track_name}' - Starting at {start_min}:{start_sec:02d}, playing {duration_seconds}s ⭐")
 
-                sp.start_playback(
-                    device_id=device_id,
-                    context_uri=CHRISTMAS_PLAYLIST_URI,
-                    offset={"position": track_index},
-                    position_ms=start_ms
-                )
+            sp.start_playback(
+                device_id=device_id,
+                context_uri=CHRISTMAS_PLAYLIST_URI,
+                offset={"position": track_index},
+                position_ms=start_ms
+            )
 
-                # Wait for the specified duration
-                time.sleep(duration_seconds)
+            # Wait for the specified duration
+            time.sleep(duration_seconds)
         else:
             # Default behavior: start at 0s, play 60s
             print(f"🎵 Track #{song_number}/{total_tracks} - '{track_name}' - Starting at 0:00, playing 60s")
