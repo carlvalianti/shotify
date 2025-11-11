@@ -5,24 +5,24 @@ import time
 # Christmas Power Hour Configuration
 CHRISTMAS_PLAYLIST_URI = "spotify:playlist:3KmQlFPFNb1mpsF9mVkyZ8"
 CHRISTMAS_PLAYLIST_NAME = "Christmas Power Hour"
-SONG_DURATION = 3  # seconds - Change to 60 for real power hour
+SONG_DURATION = 2  # seconds - Change to 60 for real power hour
 
 # ONLY list tracks with custom timings
 # Format: "track name (or partial)": (start_ms, duration_seconds)
 # Track names are case-insensitive and can be partial matches
 # Any track not listed here will default to: start at 0s, play 60s
 CUSTOM_TRACKS = {
-    "Christmas Canon": (165000, 65),  # Start at 2:45
-    "Thistlehair": (20000, 60),  # Start at 0:20
-    "Has Got the Aids": (55000, 60),  # Start at 0:55
-    "Same Old Lang": (160000, 60),  # Start at 2:40
-    "Do They Know": (100000, 63),  # Start at 1:40
-    "Grown-Up": (130000, 60),  # Start at 2:10
-    "Twelve Pains": (115000, 60),  # Start at 1:55
-    "Cherry Cherry": (120000, 60),  # Start at 2:00
-    "Believe Josh": (158000, 60),  # Start at 2:38
-    "Bruce": (30000, 60),  # Start at 0:30
-    "Happy Hanukkah": (0, 215),  # Play full song
+    # "Christmas Canon": (165000, 65),  # Start at 2:45
+    # "Thistlehair": (20000, 60),  # Start at 0:20
+    # "Has Got the Aids": (55000, 60),  # Start at 0:55
+    # "Same Old Lang": (160000, 60),  # Start at 2:40
+    # "Do They Know": (100000, 63),  # Start at 1:40
+    # "Grown-Up": (130000, 60),  # Start at 2:10
+    # "Twelve Pains": (115000, 60),  # Start at 1:55
+    # "Cherry Cherry": (120000, 60),  # Start at 2:00
+    # "Believe Josh": (158000, 60),  # Start at 2:38
+    # "Bruce": (30000, 60),  # Start at 0:30
+    # "Happy Hanukkah": (0, 215),  # Play full song
 }
 
 # Note: Total track count is retrieved dynamically from the playlist
@@ -140,10 +140,13 @@ def christmas_powerhour(device_id, start_index=0):
             try:
                 # Get the song duration
                 track_duration_ms = track_item['track']['duration_ms']
-                track_duration_sec = track_duration_ms / 1000
 
-                # Sleep for the duration (with a small buffer)
-                time.sleep(track_duration_sec + 2)
+                # Sleep for the duration minus 5 seconds
+                track_duration_sec = (track_duration_ms / 1000) - 5
+                time.sleep(track_duration_sec)
+
+                # Pause music after last song but before break
+                sp.pause_playback(device_id=device_id)
 
             except Exception as e:
                 print(f"   Note: Couldn't get track duration, waiting 5 minutes max - {e}")
