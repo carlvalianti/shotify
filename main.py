@@ -102,8 +102,8 @@ def user_information(user_playlists):
 
     while True:
     # print 25 user playlists and store IDs of each
-        print("\nHere are your (25) most recently played playlists:")
-        for item in name_and_uri[:25]:
+        print("\nHere are your (40) most recently played playlists:")
+        for item in name_and_uri[:40]:
             count += 1
             print(f"{count}. {item[0]}") #maybe only show first X amount of characters?
 
