@@ -4,7 +4,7 @@
 # Any track not listed here will default to: start at 0s, play 60s
 
 CUSTOM_TRACKS = {
-    "Mariah Carey": (9000, 6),  # FOR TESTING
+    "Mariah Carey": (0, 101),  # Play for 101 seconds, stop at 1:41
     "Mathis": (0, 62),  # Play for 62 seconds, stop at 1:02
     "Christmas Canon": (165000, 66),  # Start at 2:45, play for 66 seconds, stop at 3:51
     "Kitt": (0, 59),  # Play for 59 seconds, stop at 0:59
@@ -44,7 +44,7 @@ CUSTOM_TRACKS = {
     "William Hung": (0, 66),  # Play for 66 seconds, stop at 1:06 (revisit)
     "I Guess It's Christmas": (85000, 68),  # Start at 1:25, play for 68 seconds, stop at 2:33 (double check)
     "Carrie Underwood": (175000, 61),  # Start at 2:55, play for 61 seconds, stop at 3:56
-    "Happy Hanukkah": (0, 167),  # Play full song, stop at 2:47
+    "Happy Hanukkah": (0, 167),  # Play almost full song, stop at 2:47
     "Justin Bieber": (50000, 60),  # Start at 0:50, play for 60 seconds, stop at 1:50
     "I Saw Mommy": (20000, 61),  # Start at 0:20, play for 61 seconds, stop at 1:21
     "Hippopoptamus": (3000, 61),  # Start at 0:03, play for 61 seconds, stop at 1:04
