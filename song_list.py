@@ -21,6 +21,7 @@ CUSTOM_TRACKS = {
     "Andy Williams": (0, 65),  # Play for 65 seconds, stop at 1:05
     "Ariana": (9000, 62),  # Start at 0:09, play for 62 seconds, stop at 1:11
     "Band Aid": (106000, 66),  # Start at 1:46, play for 66 seconds, stop at 2:52
+    "Elizabeth Chan": (5000, 62),  # Start at 0:05, play for 62 seconds, stop at 1:07
     #"Brenda Lee": (0, 61),  # Play for 61 seconds, stop at 1:01
     "Daryl Hall": (0, 67),  # Play for 67 seconds, stop at 1:07
     "Thistlehair": (19000, 63),  # Start at 0:19, play for 63 seconds, stop at 1:22
